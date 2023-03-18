@@ -9,7 +9,6 @@ const Register = async (req, res) => {
   try {
     if (!userExist) {
       let data = await User.create({ name, email, password: hash, pic });
-      console.log(data);
       return res.status(201).json({
         _id: data._id,
         name: data.name,
