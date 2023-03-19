@@ -186,7 +186,7 @@ export default function SignUp() {
         />
       </FormControl>
       <Button
-        colorScheme={"blue"}
+        bg={"blue"}
         width="100%"
         style={{ marginTop: 15 }}
         onClick={handleSubmit}

@@ -41,7 +41,7 @@ export default function MyChats({ fetchAgain }) {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChat();
   }, [fetchAgain]);
-
+ 
   return (
     <>
       <Box
@@ -101,7 +101,7 @@ export default function MyChats({ fetchAgain }) {
                   <Text>
                     {!chat.isGroupChat
                       ? getSender(loggedUser, chat.users)
-                      : chat.ChatName}
+                      : chat.chatName}
                   </Text>
                 </Box>
               ))}

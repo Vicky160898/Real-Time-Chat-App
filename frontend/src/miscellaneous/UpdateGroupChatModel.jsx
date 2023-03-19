@@ -22,7 +22,11 @@ import UserListItem from "../components/UserListItem";
 import { ChatState } from "../Context/ChatProvider";
 import UserBadgeItem from "./UserBadgeItem";
 
-export default function UpdateGroupChatModel({ fetchAgain, setFetchAgain }) {
+export default function UpdateGroupChatModel({
+  fetchAgain,
+  setFetchAgain,
+  fetchMessages,
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user, selectedChat, setSelectedChat } = ChatState();
   const [groupChatName, setGroupChatName] = useState();
@@ -33,7 +37,7 @@ export default function UpdateGroupChatModel({ fetchAgain, setFetchAgain }) {
   const toast = useToast();
 
   const handleRemove = async (user1) => {
-    console.log(user1)
+    console.log(user1);
     if (selectedChat.groupAdmin._id !== user._id && user1._id !== user._id) {
       toast({
         title: "Only Admin Can Remove SomeOne!",
@@ -60,6 +64,7 @@ export default function UpdateGroupChatModel({ fetchAgain, setFetchAgain }) {
       //if ones user remove the group so his don't want see the the chat that why here we making setselectedChat empty..
       user1._id === user._id ? setSelectedChat() : setSelectedChat(data);
       setFetchAgain(!fetchAgain);
+      fetchMessages();
       setLoading(false);
     } catch (error) {
       toast({
@@ -74,7 +79,7 @@ export default function UpdateGroupChatModel({ fetchAgain, setFetchAgain }) {
     }
   };
   const handleGroup = async (user1) => {
-    console.log(selectedChat)
+    console.log(selectedChat);
     if (selectedChat.users.find((u) => u._id === user1.id)) {
       toast({
         title: "User Already Present in the Group!",
