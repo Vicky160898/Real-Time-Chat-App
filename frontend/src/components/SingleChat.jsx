@@ -16,11 +16,19 @@ import ProfileModel from "../miscellaneous/ProfileModel";
 import UpdateGroupChatModel from "../miscellaneous/UpdateGroupChatModel";
 import ScrollableChat from "./ScrollableChat";
 import "./styles.css";
+import io from "socket.io-client";
+//here we implementing socket.io operations...
+const ENDPOINT = "http://localhost:8080";
+var socket, selectedChatCompare;
+
 export default function SingleChat({ fetchAgain, setFetchAgain }) {
   const [message, setMassage] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState();
   const { user, selectedChat, setSelectedChat } = ChatState();
+  const [socketConnected, setSocketConnected] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const [istyping, setIsTyping] = useState(false);
   const toast = useToast();
 
   const fetchMessages = async () => {
@@ -39,6 +47,7 @@ export default function SingleChat({ fetchAgain, setFetchAgain }) {
       console.log(message);
       setMassage(data);
       setLoading(false);
+      socket.emit("join chat", selectedChat._id);
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -51,12 +60,37 @@ export default function SingleChat({ fetchAgain, setFetchAgain }) {
     }
   };
 
+  useEffect(() => {
+    //here we creating connection of socket.io...
+    socket = io(ENDPOINT);
+    socket.emit("setup", user);
+    socket.on("connected", () => setSocketConnected(true));
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stop typing", () => setIsTyping(false));
+  }, []);
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
     //Typing Indicator Logic..
+    if (!socketConnected) return;
+    if (!typing) {
+      setTyping(true);
+      socket.emit("typing", selectedChat._id);
+    }
+    //here we building debouncing like...
+    let lastTypingTime = new Date().getTime();
+    var timerLength = 3000; //sec
+    setTimeout(() => {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - lastTypingTime;
+      if (timeDiff >= timerLength && typing) {
+        socket.emit("stop typing", selectedChat._id);
+        setTyping(false);
+      }
+    }, timerLength);
   };
   const sendMessage = async (event) => {
     if (event.key === "Enter" && newMessage) {
+      socket.emit("stop typing", selectedChat._id);
       try {
         const config = {
           headers: {
@@ -73,6 +107,7 @@ export default function SingleChat({ fetchAgain, setFetchAgain }) {
           config
         );
         setNewMessage("");
+        socket.emit("new message", data);
         setMassage([...message, data]);
       } catch (error) {
         toast({
@@ -88,7 +123,23 @@ export default function SingleChat({ fetchAgain, setFetchAgain }) {
   };
   useEffect(() => {
     fetchMessages();
+    //here we getting the backup of chat..
+    selectedChatCompare = selectedChat;
   }, [selectedChat]);
+
+  useEffect(() => {
+    socket.on("message recieved", (newMessageRecieved) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageRecieved.chat._id
+      ) {
+        //give notification..
+      } else {
+        setMassage([...message, newMessageRecieved]);
+      }
+    });
+  });
+
   return (
     <>
       {selectedChat ? (
@@ -146,10 +197,11 @@ export default function SingleChat({ fetchAgain, setFetchAgain }) {
               />
             ) : (
               <div className="messages">
-                <ScrollableChat message={message}/> {/* messasge */}
+                <ScrollableChat message={message} /> {/* messasge */}
               </div>
             )}
             <FormControl onKeyDown={sendMessage} mt={3} isRequired>
+              {istyping ? <div>loading...</div> : <></>}
               <Input
                 variant={"filled"}
                 border="1px solid grey"
