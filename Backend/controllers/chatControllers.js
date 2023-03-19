@@ -75,13 +75,14 @@ const createGroupChat = async (req, res) => {
       .status(400)
       .send("More than 2 users are required to form a group chat");
   }
-  users.push(req.user);
+  console.log(req.id);
+  users.push(req.id);
   try {
     const groupChat = await chat.create({
       chatName: req.body.name,
       users: users,
       isGroupChat: true,
-      groupAdmin: req.user,
+      groupAdmin: req.id,
     });
 
     const fullGroupChat = await chat
@@ -148,11 +149,11 @@ const RemoveToGroup = async (req, res) => {
     )
     .populate("users", "-password")
     .populate("groupAdmin", "-password");
-
+  //console.log(remove);
   if (!remove) {
     res.status(404).send("Chat Not Found");
   } else {
-    res.json(added);
+    res.json(remove);
   }
 };
 module.exports = {

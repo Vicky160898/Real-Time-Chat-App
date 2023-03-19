@@ -8,7 +8,7 @@ const ProtectRoute = async (req, res, next) => {
     let verification = jwt.verify(token, process.env.JWT_SECRET);
     try {
       if (verification) {
-        console.log(verification);
+        //console.log(verification);
         req.id = verification.id;
         //console.log(req.id);
         next();
