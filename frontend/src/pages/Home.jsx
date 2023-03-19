@@ -18,7 +18,7 @@ export default function Home() {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     if (userInfo) {
       navigate("/chats");
-    }
+    } 
   }, [navigate]);
   return (
     <Container maxW={"xl"} centerContent>

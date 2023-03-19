@@ -13,6 +13,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Spinner,
   Text,
   Tooltip,
   useDisclosure,
@@ -78,7 +79,8 @@ export default function SideDrawer() {
     }
   };
 
-  const AccessChat = async (id) => {
+  const AccessChat = async (UserId) => {
+    //console.log(id)
     try {
       setloadingChat(true);
       const config = {
@@ -89,11 +91,12 @@ export default function SideDrawer() {
       };
       const { data } = await axios.post(
         `http://localhost:8080/api/chat`,
-        { id },
+        { UserId },
         config
       );
+      if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
       setSelectedChat(data);
-      setLoading(false);
+      setloadingChat(false);
       onClose();
     } catch (err) {
       toast({
@@ -176,9 +179,12 @@ export default function SideDrawer() {
                 <UserListItem
                   key={user._id}
                   user={user}
-                  handlFn={() => AccessChat(user._id)}
+                  handleFn={() => AccessChat(user._id)}
                 />
               ))
+            )}
+            {loadingChat && (
+              <Spinner ml="auto" display={"flex"} color="yellow" />
             )}
           </DrawerBody>
         </DrawerContent>
