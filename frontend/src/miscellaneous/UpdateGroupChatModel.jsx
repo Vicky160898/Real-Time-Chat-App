@@ -37,7 +37,6 @@ export default function UpdateGroupChatModel({
   const toast = useToast();
 
   const handleRemove = async (user1) => {
-    console.log(user1);
     if (selectedChat.groupAdmin._id !== user._id && user1._id !== user._id) {
       toast({
         title: "Only Admin Can Remove SomeOne!",
@@ -45,7 +44,7 @@ export default function UpdateGroupChatModel({
         status: "error",
         duration: 5000,
         isClosable: true,
-        position: "bottom",
+        position: "top",
       });
       return;
     }
@@ -66,6 +65,14 @@ export default function UpdateGroupChatModel({
       setFetchAgain(!fetchAgain);
       fetchMessages();
       setLoading(false);
+      toast({
+        title: "SomeOne Left the Group!",
+        description: "Real-Chat-App",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -79,7 +86,6 @@ export default function UpdateGroupChatModel({
     }
   };
   const handleGroup = async (user1) => {
-    console.log(selectedChat);
     if (selectedChat.users.find((u) => u._id === user1.id)) {
       toast({
         title: "User Already Present in the Group!",
@@ -130,7 +136,16 @@ export default function UpdateGroupChatModel({
     }
   };
   const handleRename = async () => {
-    if (!groupChatName) return;
+    if (!groupChatName) {
+      return toast({
+        title: "Hey! Please Fill Chat Group Name!",
+        description: "Enjoy Real-chat-app",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+    }
     try {
       setRenameLoading(true);
       const config = {
@@ -147,6 +162,14 @@ export default function UpdateGroupChatModel({
       setSelectedChat(data);
       setFetchAgain(!fetchAgain);
       setRenameLoading(false);
+      toast({
+        title: "Hey! Your Chat Group Name Updated!",
+        description: "Enjoy Real-chat-app",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -234,6 +257,9 @@ export default function UpdateGroupChatModel({
                 ml={1}
                 isLoading={renameLoading}
                 onClick={handleRename}
+                bg="#319795"
+                _hover={{ bg: "#319795" }}
+                color={"white"}
               >
                 Update
               </Button>
@@ -259,7 +285,13 @@ export default function UpdateGroupChatModel({
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="red" mr={3} onClick={() => handleRemove(user)}>
+            <Button
+              bg="#319795"
+              _hover={{ bg: "#319795" }}
+              color={"white"}
+              mr={3}
+              onClick={() => handleRemove(user)}
+            >
               Leave Group
             </Button>
           </ModalFooter>

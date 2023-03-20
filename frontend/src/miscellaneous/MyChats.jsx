@@ -1,5 +1,5 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Box, Button, Stack, Text, useToast } from "@chakra-ui/react";
+import { Avatar, Box, Button, Stack, Text, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ChatLoading from "../components/Authentication/ChatLoading";
@@ -8,9 +8,9 @@ import { ChatState } from "../Context/ChatProvider";
 import GroupChatModel from "./GroupChatModel";
 
 export default function MyChats({ fetchAgain }) {
-  const [loggedUser, setLoggedUser] = useState();
-  const { user, setUser, selectedChat, setSelectedChat, chats, setChats } =
-    ChatState();
+  const [loggedUser, setLoggedUser] = useState({});
+  const { user, selectedChat, setSelectedChat, chats, setChats } = ChatState();
+
   const toast = useToast();
   const fetchChat = async () => {
     try {
@@ -41,7 +41,7 @@ export default function MyChats({ fetchAgain }) {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChat();
   }, [fetchAgain]);
- 
+
   return (
     <>
       <Box
@@ -70,6 +70,8 @@ export default function MyChats({ fetchAgain }) {
               display={"flex"}
               fontSize={{ base: "17px", md: "10px", lg: "17px" }}
               rightIcon={<AddIcon />}
+              bg="#E8E8E8"
+              _hover={{ bg: "#319795", color: "white" }}
             >
               New Group Chat
             </Button>
@@ -93,16 +95,69 @@ export default function MyChats({ fetchAgain }) {
                   cursor="pointer"
                   bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
                   color={selectedChat === chat ? "white" : "black"}
-                  px={3}
-                  py={2}
                   borderRadius="lg"
                   key={chat._id}
                 >
-                  <Text>
-                    {!chat.isGroupChat
-                      ? getSender(loggedUser, chat.users)
-                      : chat.chatName}
-                  </Text>
+                  {chat.isGroupChat ? (
+                    <Box
+                      cursor="pointer"
+                      bg="#E8E8E8"
+                      _hover={{ background: "#38B2AC", color: "white" }}
+                      w="100%"
+                      display={"flex"}
+                      alignItems="center"
+                      color={"black"}
+                      px={3}
+                      py={2}
+                      borderRadius="lg"
+                    >
+                      <Avatar
+                        mr={2}
+                        size="sm"
+                        cursor={"pointer"}
+                        name={user.name}
+                        src={user.pic}
+                      />
+                      <Text>
+                        {!chat.isGroupChat
+                          ? getSender(loggedUser, chat.users)
+                          : chat.chatName}
+                      </Text>
+                    </Box>
+                  ) : (
+                    <Box
+                      cursor="pointer"
+                      bg="#E8E8E8"
+                      _hover={{ background: "#38B2AC", color: "white" }}
+                      w="100%"
+                      display={"flex"}
+                      alignItems="center"
+                      color={"black"}
+                      px={3}
+                      py={2}
+                      borderRadius="lg"
+                    >
+                      {chat?.users.map((el,i) =>
+                        el._id !== user._id ? (
+                          <Avatar
+                            key={i}
+                            mr={2}
+                            size="sm"
+                            cursor={"pointer"}
+                            name={el.name}
+                            src={el.pic}
+                          />
+                        ) : (
+                          <></>
+                        )
+                      )}
+                      <Text>
+                        {!chat.isGroupChat
+                          ? getSender(loggedUser, chat.users)
+                          : chat.chatName}
+                      </Text>
+                    </Box>
+                  )}
                 </Box>
               ))}
             </Stack>

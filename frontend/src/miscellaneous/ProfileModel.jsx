@@ -23,16 +23,17 @@ export default function ProfileModel({ user, children }) {
         <span onClick={onOpen}>{children}</span>
       ) : (
         <IconButton
+          bg="#E8E8E8"
           display={{ base: "flex" }}
-          icon={<ViewIcon />}
+          icon={<ViewIcon color={'blue'} size={30}/>}
           onClick={onOpen}
         />
       )}
-      <Modal size="lg" isOpen={isOpen} onClose={onClose} isCentered>
+      <Modal size="md" isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
-        <ModalContent h="410px">
+        <ModalContent h="410px" bg="#FFFFFF" color={"black"}>
           <ModalHeader
-            fontSize={"40px"}
+            fontSize={"35px"}
             fontFamily="work sans"
             display={"flex"}
             justifyContent="center"
@@ -53,7 +54,7 @@ export default function ProfileModel({ user, children }) {
               alt={user.name}
             />
             <Text
-              fontSize={{ base: "28px", md: "30px" }}
+              fontSize={{ base: "22px", md: "25px" }}
               fontFamily="work sans"
             >
               Email:{user.email}
@@ -61,7 +62,13 @@ export default function ProfileModel({ user, children }) {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
+            <Button
+              bg="#0C9EE7"
+              color={"white"}
+              _hover={{ background: "#38B2AC", color: "white" }}
+              mr={3}
+              onClick={onClose}
+            >
               Close
             </Button>
           </ModalFooter>

@@ -9,7 +9,6 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 export default function SignUp() {
   const [show, setShow] = useState(false);
@@ -19,7 +18,6 @@ export default function SignUp() {
   const [email, setEmail] = useState();
   const [name, setName] = useState();
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const [pic, setPic] = useState();
   const toast = useToast();
   const handleSubmit = async () => {
@@ -186,7 +184,9 @@ export default function SignUp() {
         />
       </FormControl>
       <Button
-        bg={"blue"}
+        bg={"#0B96E2"}
+        color="white"
+        _hover={{ bg: "#0B96E2", color: "white" }}
         width="100%"
         style={{ marginTop: 15 }}
         onClick={handleSubmit}

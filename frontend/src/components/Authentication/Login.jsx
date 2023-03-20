@@ -5,6 +5,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Text,
   useToast,
   VStack,
 } from "@chakra-ui/react";
@@ -54,11 +55,11 @@ export default function Login() {
       navigate("/chats");
     } catch (err) {
       toast({
-        title: "Error Occured!",
+        title: "Invalid Credential or Signup First!",
         status: err.response.data.message,
         duration: 5000,
         isClosable: true,
-        position: "bottom",
+        position: "top",
       });
       setLoading(false);
     }
@@ -66,6 +67,10 @@ export default function Login() {
   const handleClick = () => setShow(!show);
   return (
     <VStack spacing={"5px"}>
+      <Text>
+        For Chatting You need Minimum Two user, so you can take guest user
+        (don't need to signup) otherwise Signup with two different Credentials.
+      </Text>
       <FormControl id="email" isRequired>
         <FormLabel>Email</FormLabel>
         <Input
@@ -73,7 +78,7 @@ export default function Login() {
           placeholder="Enter Your Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-        />{" "}
+        />
       </FormControl>
       <FormControl id="password" isRequired>
         <FormLabel>Password</FormLabel>
@@ -93,7 +98,9 @@ export default function Login() {
         </InputGroup>
       </FormControl>{" "}
       <Button
-        colorScheme={"blue"}
+        bg={"#1082CB"}
+        color="white"
+        _hover={{ bg: "#1082CB", color: "white" }}
         width="100%"
         style={{ marginTop: 15 }}
         onClick={handleSubmit}
@@ -103,15 +110,17 @@ export default function Login() {
       </Button>
       <Button
         variant={"solid"}
-        colorScheme={"red"}
+        bg={"#319795"}
+        _hover={{ bg: "teal", color: "white" }}
+        color="white"
         width="100%"
         style={{ marginTop: 15 }}
         onClick={() => {
-          setEmail("guest@example.com");
+          setEmail("guest@gmail.com");
           setPassword("12345");
         }}
       >
-        Get Guest User Credentials
+        Get Guest User Credentials For Chat
       </Button>
     </VStack>
   );

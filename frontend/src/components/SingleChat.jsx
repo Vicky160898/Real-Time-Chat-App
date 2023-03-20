@@ -1,5 +1,6 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
+  Avatar,
   Box,
   FormControl,
   IconButton,
@@ -34,6 +35,7 @@ export default function SingleChat({ fetchAgain, setFetchAgain }) {
   const [istyping, setIsTyping] = useState(false);
   const toast = useToast();
 
+  //this is the default credential for animations
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -56,7 +58,6 @@ export default function SingleChat({ fetchAgain, setFetchAgain }) {
         `http://localhost:8080/api/message/${selectedChat._id}`,
         config
       );
-      console.log(message);
       setMassage(data);
       setLoading(false);
       socket.emit("join chat", selectedChat._id);
@@ -183,7 +184,7 @@ export default function SingleChat({ fetchAgain, setFetchAgain }) {
               </>
             ) : (
               <>
-                {selectedChat.chatName.toUpperCase()}{" "}
+                {selectedChat.chatName.toUpperCase()}
                 <UpdateGroupChatModel
                   fetchAgain={fetchAgain}
                   setFetchAgain={setFetchAgain}
@@ -233,7 +234,8 @@ export default function SingleChat({ fetchAgain, setFetchAgain }) {
                 variant={"filled"}
                 border="1px solid grey"
                 bg="#E0E0E0"
-                placeholder="Enter a message..."
+                placeholder="Type a message here..."
+                _placeholder={{ color: "grey" }}
                 onChange={typingHandler}
                 value={newMessage}
               />
@@ -243,10 +245,19 @@ export default function SingleChat({ fetchAgain, setFetchAgain }) {
       ) : (
         <Box
           display={"flex"}
+          flexDirection="column"
           alignItems="center"
           justifyContent={"center"}
           h="100%"
+          gap={5}
         >
+          <Avatar
+            width={"50%"}
+            height="40%"
+            borderRadius="50%"
+            src="https://thumbs.gfycat.com/FocusedMediumAcornbarnacle-size_restricted.gif"
+            alt="gif"
+          />
           <Text fontSize={"3xl"} pb={3} fontFamily="Work sans">
             Click on a User to Start Chatting
           </Text>
