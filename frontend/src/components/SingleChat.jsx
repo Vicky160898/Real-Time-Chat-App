@@ -17,6 +17,8 @@ import UpdateGroupChatModel from "../miscellaneous/UpdateGroupChatModel";
 import ScrollableChat from "./ScrollableChat";
 import "./styles.css";
 import io from "socket.io-client";
+import Lottie from "react-lottie";
+import animationData from "../animations/typing.json";
 //here we implementing socket.io operations...
 const ENDPOINT = "http://localhost:8080";
 var socket, selectedChatCompare;
@@ -25,11 +27,21 @@ export default function SingleChat({ fetchAgain, setFetchAgain }) {
   const [message, setMassage] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState();
-  const { user, selectedChat, setSelectedChat } = ChatState();
+  const { user, selectedChat, setSelectedChat, notification, setNotification } =
+    ChatState();
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
   const toast = useToast();
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRation: "xMidYMid slice",
+    },
+  };
 
   const fetchMessages = async () => {
     if (!selectedChat) return;
@@ -134,6 +146,11 @@ export default function SingleChat({ fetchAgain, setFetchAgain }) {
         selectedChatCompare._id !== newMessageRecieved.chat._id
       ) {
         //give notification..
+        if (!notification.includes(newMessageRecieved)) {
+          setNotification([newMessageRecieved, ...notification]);
+          //here we updating chat according to message...
+          setFetchAgain(!fetchAgain);
+        }
       } else {
         setMassage([...message, newMessageRecieved]);
       }
@@ -201,7 +218,17 @@ export default function SingleChat({ fetchAgain, setFetchAgain }) {
               </div>
             )}
             <FormControl onKeyDown={sendMessage} mt={3} isRequired>
-              {istyping ? <div>loading...</div> : <></>}
+              {istyping ? (
+                <div>
+                  <Lottie
+                    options={defaultOptions}
+                    width={70}
+                    style={{ marginBottom: 15, marginLeft: 0 }}
+                  />
+                </div>
+              ) : (
+                <></>
+              )}
               <Input
                 variant={"filled"}
                 border="1px solid grey"
