@@ -37,13 +37,13 @@ Real-Time-Chat-App Clone is Replica of one of the biggest social media platform 
 ### Login Page UI 😎
 
 ![Login Pgae](https://user-images.githubusercontent.com/107462150/226529167-8c24eee7-fbd5-43ba-930e-459e022594ef.png)
-g)
+
 
 
 ### Signup Page UI 👌
 
 ![Signup Pgae](https://user-images.githubusercontent.com/107462150/226529388-12f3820d-65b1-4f03-a78d-7a9e1b5da239.png)
-)
+
 
 
 
@@ -103,7 +103,7 @@ g)
 
 ## Authors
 
-- [vinayak hiwse](https://github.com/Vicky160898)
+- ![vinayakhiwse](https://github.com/Vicky160898)
 
 
 ## Environment Variables
