@@ -103,8 +103,8 @@ Real-Time-Chat-App Clone is Replica of one of the biggest social media platform 
 
 ## Authors
 
-- ![vinayak hiwse]
-- (https://github.com/Vicky160898)
+- vinayak hiwse
+- https://github.com/Vicky160898
 
 
 ## Environment Variables
